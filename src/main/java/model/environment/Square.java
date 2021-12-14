@@ -1,7 +1,7 @@
 package model.environment;
 
-import model.pieces.Piece;
 import lombok.Data;
+import model.pieces.Piece;
 
 @Data
 public class Square {

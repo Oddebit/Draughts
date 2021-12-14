@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 class CardinalTest {
 
@@ -14,7 +15,7 @@ class CardinalTest {
         IntStream.rangeClosed(1, 5).forEach(n -> {
 
             List<Cardinal> cardinals = Cardinal.getEdges(n);
-            if (n !=5) {
+            if (n != 5) {
                 assertEquals(cardinals.size(), 1, n + " should only touch one edge.");
                 assertSame(cardinals.get(0), Cardinal.NORTH, n + " should touch north.");
             }
@@ -41,5 +42,4 @@ class CardinalTest {
             }
         });
     }
-
 }

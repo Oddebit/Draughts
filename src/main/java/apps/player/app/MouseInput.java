@@ -1,4 +1,4 @@
-package input;
+package apps.player.app;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,12 +7,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 @RequiredArgsConstructor
-public class MouseInput  implements MouseListener, MouseMotionListener {
+public class MouseInput implements MouseListener, MouseMotionListener {
     private final Dispatcher dispatcher;
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        dispatcher.click(e.getPoint());
     }
 
     @Override
@@ -37,11 +37,11 @@ public class MouseInput  implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        mouseClicked(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        dispatcher.hover(e.getPoint());
     }
 }
