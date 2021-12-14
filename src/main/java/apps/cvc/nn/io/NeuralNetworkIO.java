@@ -1,7 +1,7 @@
-package apps.computer.nn.io;
+package apps.cvc.nn.io;
 
-import apps.computer.nn.Matrix;
-import apps.computer.nn.NeuralNetwork;
+import apps.cvc.nn.Matrix;
+import apps.cvc.nn.NeuralNetwork;
 
 import java.io.*;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import java.util.List;
 
 public class NeuralNetworkIO {
 
+    //todo : safe write
     public static void write(NeuralNetwork neuralNetwork) {
         write("weightsIH", neuralNetwork.getWeightsIH());
         write("biasesH", neuralNetwork.getBiasH());

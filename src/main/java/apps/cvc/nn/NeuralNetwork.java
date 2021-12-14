@@ -1,4 +1,4 @@
-package apps.computer.nn;
+package apps.cvc.nn;
 
 //
 // Source code recreated from a .class file by IntelliJ IDEA
@@ -15,7 +15,7 @@ public class NeuralNetwork {
     private final Matrix weightsHO;
     private final Matrix biasO;
 
-    private final double learningRate = 0.0001D;
+    private final double learningRate = 0.005;
 
     public NeuralNetwork(int input, int hidden, int output) {
         this.weightsIH = new Matrix(hidden, input);

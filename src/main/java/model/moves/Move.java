@@ -19,8 +19,6 @@ public abstract class Move {
 
     private final Type type;
 
-    private Image image;
-    private Image imageHovered;
     private Rectangle frame;
 
     private final Piece mover;
@@ -75,6 +73,8 @@ public abstract class Move {
         if (roundups.isEmpty()) return March.listMarches(board, pieceColor);
         else return roundups;
     }
+
+    public abstract LinkedList<Piece> listTaken();
 
     public static Move parseString(String string) {
         return null;

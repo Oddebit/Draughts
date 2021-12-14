@@ -1,4 +1,4 @@
-package apps.computer.nn;
+package apps.cvc.nn;
 
 import lombok.Getter;
 
@@ -99,13 +99,11 @@ public class Matrix {
 
     public static Matrix transpose(Matrix a) {
         Matrix matrix = new Matrix(a.cols, a.rows);
-
         for(int i = 0; i < a.rows; ++i) {
             for(int j = 0; j < a.cols; ++j) {
                 matrix.data[j][i] = a.data[i][j];
             }
         }
-
         return matrix;
     }
 
@@ -113,7 +111,7 @@ public class Matrix {
         Matrix matrix = new Matrix(a.rows, b.cols);
         for(int i = 0; i < matrix.rows; ++i) {
             for(int j = 0; j < matrix.cols; ++j) {
-                double sum = 0.0D;
+                double sum = 0.0;
                 for(int k = 0; k < a.cols; ++k) {
                     sum += a.data[i][k] * b.data[k][j];
                 }

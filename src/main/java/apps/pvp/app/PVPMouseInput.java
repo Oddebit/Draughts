@@ -1,4 +1,4 @@
-package apps.player.app;
+package apps.pvp.app;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,8 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 @RequiredArgsConstructor
-public class MouseInput implements MouseListener, MouseMotionListener {
-    private final Dispatcher dispatcher;
+public class PVPMouseInput implements MouseListener, MouseMotionListener {
+    private final PVPDispatcher dispatcher;
 
     @Override
     public void mouseClicked(MouseEvent e) {

@@ -1,4 +1,4 @@
-package apps.player.app;
+package apps.pvp.app;
 
 import game.Match;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Getter
 @Setter
-public class Dispatcher {
+public class PVPDispatcher {
     private Graphics graphics;
 
     private final Match match;
@@ -25,7 +25,7 @@ public class Dispatcher {
     private List<? extends Move> possibleMoves;
     private Move hovered;
 
-    public Dispatcher() {
+    public PVPDispatcher() {
         this.match = new Match();
         this.board = match.getBoard();
         this.squareSize = 60;

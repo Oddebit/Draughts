@@ -1,4 +1,4 @@
-package apps.computer;
+package apps.cvc;
 
 import model.environment.Board;
 import model.environment.Square;

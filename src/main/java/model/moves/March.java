@@ -17,8 +17,10 @@ import java.util.Map;
 
 public class March extends Move {
 
-    private Image imageStep;
-    private Image imageStepHovered;
+    private static Image image;
+    private static Image imageHovered;
+    private static Image imageStep;
+    private static Image imageStepHovered;
 
     public March(Piece mover, int from, int to) {
         super(Type.MARCH, mover, from, to);
@@ -27,11 +29,14 @@ public class March extends Move {
         assert fromPoint != null;
         assert toPoint != null;
         setFrame(BoardUtils.getFrame(fromPoint, toPoint));
+    }
+
+    static {
         try {
-            setImage(ImageIO.read(new File("res/moves/arrow_no_hover.png")));
-            setImageHovered(ImageIO.read(new File("res/moves/arrow_hover.png")));
-            this.imageStep = ImageIO.read(new File("res/moves/line_no_hover.png"));
-            this.imageStepHovered = ImageIO.read(new File("res/moves/line_hover.png"));
+            image = ImageIO.read(new File("res/moves/arrow_no_hover.png"));
+            imageHovered = ImageIO.read(new File("res/moves/arrow_hover.png"));
+            imageStep = ImageIO.read(new File("res/moves/line_no_hover.png"));
+            imageStepHovered = ImageIO.read(new File("res/moves/line_hover.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +62,7 @@ public class March extends Move {
             fromY += Math.copySign(squareSize, dy);
         }
 
-        graphics.drawImage(hovered ? getImageHovered() : getImage(),
+        graphics.drawImage(hovered ? imageHovered : image,
                 pointTo.x - (int) Math.copySign(1.5 * squareSize, dx),
                 pointTo.y - (int) Math.copySign(1.5 * squareSize, dy),
                 (int) Math.copySign(2 * squareSize, dx), (int) Math.copySign(2 * squareSize, dy),
@@ -96,6 +101,10 @@ public class March extends Move {
         return marches;
     }
 
+    @Override
+    public LinkedList<Piece> listTaken() {
+        return new LinkedList<>();
+    }
 
     @Override
     public boolean equals(Object o) {

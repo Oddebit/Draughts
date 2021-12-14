@@ -1,18 +1,21 @@
-package apps.player.app;
+package apps.pvc.app;
+
+import apps.pvp.app.PVPApp;
+import apps.pvp.app.Window;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
-public class App extends Canvas implements Runnable {
+public class PVCApp extends Canvas implements Runnable {
 
     private Thread thread;
     private boolean running;
-    private final Dispatcher dispatcher;
+    private final PVCDispatcher dispatcher;
 
-    public App() {
-        dispatcher = new Dispatcher();
+    public PVCApp() {
+        dispatcher = new PVCDispatcher();
         new Window(dispatcher.getSquareSize() * 10, this);
-        MouseInput mouseInput = new MouseInput(dispatcher);
+        PVCMouseInput mouseInput = new PVCMouseInput(dispatcher);
         this.addMouseListener(mouseInput);
         this.addMouseMotionListener(mouseInput);
         start();
@@ -36,7 +39,13 @@ public class App extends Canvas implements Runnable {
 
     @Override
     public void run() {
+        long lastTime;
+        long now;
         while (running) {
+            lastTime = System.currentTimeMillis();
+            do {
+                now = System.currentTimeMillis();
+            } while (now - lastTime < 100);
             BufferStrategy bufferStrategy = getBufferStrategy();
             Graphics graphics = getBufferStrategy().getDrawGraphics();
             dispatcher.render(graphics);
@@ -46,6 +55,7 @@ public class App extends Canvas implements Runnable {
     }
 
     public static void main(String[] args) {
-        new App();
+        new PVCApp();
     }
 }
+

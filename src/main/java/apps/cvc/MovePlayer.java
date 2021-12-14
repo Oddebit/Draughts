@@ -1,5 +1,6 @@
-package apps.computer;
+package apps.cvc;
 
+import apps.cvc.nn.io.NeuralNetworkIO;
 import lombok.Getter;
 import model.environment.Board;
 import model.moves.Move;
@@ -29,8 +30,7 @@ public class MovePlayer {
         double closest = toMove.getOpponent().ordinal();
 
         for (Move possibleMove : possibleMoves) {
-            Board nextBoard = BoardCloner.cloneBoard(board, possibleMove);
-            Integer[] input = BoardWriter.writeBoard(nextBoard, toMove);
+            Integer[] input = BoardWriter.writeBoard(board, possibleMove);
             double output = boardEvaluator.evaluateBoard(input);
 
             if (Math.abs(output - toWin) < Math.abs(closest - toWin)) {
@@ -46,5 +46,9 @@ public class MovePlayer {
     public void reviewGame(PieceColor winner) {
         int toWin = winner.ordinal();
         inputsOutputs.forEach(io -> boardEvaluator.learn(io.getValue0(), io.getValue1(), toWin));
+    }
+
+    public void saveNetwork() {
+        NeuralNetworkIO.write(boardEvaluator.getNeuralNetwork());
     }
 }

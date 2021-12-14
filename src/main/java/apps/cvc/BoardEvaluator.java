@@ -1,7 +1,7 @@
-package apps.computer;
+package apps.cvc;
 
-import apps.computer.nn.NeuralNetwork;
-import apps.computer.nn.io.NeuralNetworkIO;
+import apps.cvc.nn.NeuralNetwork;
+import apps.cvc.nn.io.NeuralNetworkIO;
 import lombok.Getter;
 
 @Getter
@@ -17,8 +17,8 @@ public class BoardEvaluator {
         return neuralNetwork.predict(intToDouble(input))[0];
     }
 
-    public void learn(Integer[] input, Double[] output, double toWin) {
-        neuralNetwork.propagateBack(intToDouble(input), doubleToDouble(output), new double[]{toWin});
+    public void learn(Integer[] input, Double[] output, double winner) {
+        neuralNetwork.propagateBack(intToDouble(input), doubleToDouble(output), new double[]{winner});
     }
 
     public void stop() {

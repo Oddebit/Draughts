@@ -1,7 +1,7 @@
 package computer.io;
 
-import apps.computer.nn.NeuralNetwork;
-import apps.computer.nn.io.NeuralNetworkIO;
+import apps.cvc.nn.NeuralNetwork;
+import apps.cvc.nn.io.NeuralNetworkIO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ class NeuralNetworkIOTest {
 
     @Test
     void writeThenRead() {
-        NeuralNetwork write = new NeuralNetwork(10, 20, 5);
+        NeuralNetwork write = new NeuralNetwork(202, 202, 1);
         NeuralNetworkIO.write(write);
         NeuralNetwork read = NeuralNetworkIO.read();
 

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Getter
 public class Take extends Move {
+    private static Image imageHovered;
     private final Piece taken;
 
     public Take(Piece mover, int from, int to, Piece taken) {
@@ -26,12 +27,15 @@ public class Take extends Move {
         assert fromPoint != null;
         assert toPoint != null;
         setFrame(BoardUtils.getFrame(fromPoint, toPoint));
+        this.taken = taken;
+    }
+
+    static {
         try {
-            setImageHovered(ImageIO.read(new File("res/moves/line_hover.png")));
+            imageHovered = ImageIO.read(new File("res/moves/line_hover.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.taken = taken;
     }
 
     public static List<Take> listTakes(Board board, Piece piece) {
@@ -74,6 +78,13 @@ public class Take extends Move {
     }
 
     @Override
+    public LinkedList<Piece> listTaken() {
+        LinkedList<Piece> taken = new LinkedList<>();
+        taken.add(this.taken);
+        return taken;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -98,7 +109,7 @@ public class Take extends Move {
         int fromX = pointFrom.x - (int) Math.copySign(squareSize / 2d, dx);
         int fromY = pointFrom.y - (int) Math.copySign(squareSize / 2d, dy);
         for (int i = 0; i < Math.abs(dy / squareSize); i++) {
-            graphics.drawImage(getImageHovered(), fromX, fromY,
+            graphics.drawImage(imageHovered, fromX, fromY,
                     (int) Math.copySign(2 * squareSize, dx), (int) Math.copySign(2 * squareSize, dy),
                     new Frame());
             fromX += Math.copySign(squareSize, dx);

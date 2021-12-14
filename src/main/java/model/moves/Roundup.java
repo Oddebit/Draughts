@@ -21,6 +21,9 @@ import static java.util.stream.Collectors.toList;
 @Getter
 public class Roundup extends Move {
 
+    private static Image image;
+    private static Image imageHovered;
+
     private final LinkedList<Take> route;
 
     public Roundup(Piece mover, LinkedList<Take> route) {
@@ -39,9 +42,12 @@ public class Roundup extends Move {
         int squareSize = BoardUtils.squareSize;
         assert toPoint != null;
         setFrame(new Rectangle(toPoint.x, toPoint.y, squareSize, squareSize));
+    }
+
+    static {
         try {
-            setImage(ImageIO.read(new File("res/moves/circle_no_hover.png")));
-            setImageHovered(ImageIO.read(new File("res/moves/circle_hover.png")));
+            image = ImageIO.read(new File("res/moves/circle_no_hover.png"));
+            imageHovered = ImageIO.read(new File("res/moves/circle_hover.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,6 +100,11 @@ public class Roundup extends Move {
     }
 
     @Override
+    public LinkedList<Piece> listTaken() {
+        return this.route.stream().map(Take::getTaken).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
     public String toString() {
         return route.stream()
                 .map(Take::getTo)
@@ -106,6 +117,7 @@ public class Roundup extends Move {
         Point pointTo = BoardUtils.getPointFromPosition(getTo(), false);
 
         assert pointTo != null;
-        graphics.drawImage(hovered ? getImageHovered() : getImage(), pointTo.x, pointTo.y, BoardUtils.squareSize, BoardUtils.squareSize, new Frame());
+        graphics.drawImage(hovered ? imageHovered : image, pointTo.x, pointTo.y,
+                BoardUtils.squareSize, BoardUtils.squareSize, new Frame());
     }
 }
