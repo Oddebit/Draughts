@@ -26,6 +26,15 @@ public class Roundup extends Move {
 
     private final LinkedList<Take> route;
 
+    static {
+        try {
+            image = ImageIO.read(new File("res/img/moves/circle_no_hover.png"));
+            imageHovered = ImageIO.read(new File("res/img/moves/circle_hover.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Roundup(Piece mover, LinkedList<Take> route) {
         super(Type.ROUNDUP, mover, route.getFirst().getFrom(), route.getLast().getTo());
         this.route = new LinkedList<>();
@@ -42,15 +51,6 @@ public class Roundup extends Move {
         int squareSize = BoardUtils.squareSize;
         assert toPoint != null;
         setFrame(new Rectangle(toPoint.x, toPoint.y, squareSize, squareSize));
-    }
-
-    static {
-        try {
-            image = ImageIO.read(new File("res/moves/circle_no_hover.png"));
-            imageHovered = ImageIO.read(new File("res/moves/circle_hover.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public Roundup(Roundup roundup, Take take) {

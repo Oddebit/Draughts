@@ -33,10 +33,10 @@ public class March extends Move {
 
     static {
         try {
-            image = ImageIO.read(new File("res/moves/arrow_no_hover.png"));
-            imageHovered = ImageIO.read(new File("res/moves/arrow_hover.png"));
-            imageStep = ImageIO.read(new File("res/moves/line_no_hover.png"));
-            imageStepHovered = ImageIO.read(new File("res/moves/line_hover.png"));
+            image = ImageIO.read(new File("res/img/moves/arrow_no_hover.png"));
+            imageHovered = ImageIO.read(new File("res/img/moves/arrow_hover.png"));
+            imageStep = ImageIO.read(new File("res/img/moves/line_no_hover.png"));
+            imageStepHovered = ImageIO.read(new File("res/img/moves/line_hover.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

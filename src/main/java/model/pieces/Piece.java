@@ -26,7 +26,7 @@ public abstract class Piece {
             for (PieceColor color : PieceColor.values()) {
                 images.put(color, new HashMap<>());
                 for (Type type : Type.values()) {
-                    images.get(color).put(type, ImageIO.read(new File(String.format("res/pieces/%s_%s.png",
+                    images.get(color).put(type, ImageIO.read(new File(String.format("res/img/pieces/%s_%s.png",
                             color.name().toLowerCase(), type.name().toLowerCase()))));
                 }
             }

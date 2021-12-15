@@ -7,7 +7,7 @@ public class CVCApp extends Canvas{
     private final CVCDispatcher dispatcher;
 
     public CVCApp() {
-        int epochs = 1000;
+        int epochs = 40_000;
         dispatcher = new CVCDispatcher();
         this.addKeyListener(new CVCKeyInput(dispatcher));
 

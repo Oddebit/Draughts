@@ -2,6 +2,7 @@ package apps.cvc.app;
 
 import apps.cvc.MovePlayer;
 import game.Match;
+import game.io.MatchIO;
 import model.environment.Board;
 import model.moves.Move;
 import model.pieces.PieceColor;
@@ -26,15 +27,17 @@ public class CVCDispatcher {
             System.out.println("-".repeat(19));
             System.out.printf("***   Game %2d   ***", i + 1);
             long lastTime = System.currentTimeMillis();
-            runGame(probability);
+            Match match = runGame(probability);
             System.out.printf("Finished in %.3f sec%n%n", (System.currentTimeMillis() - lastTime) / 1000d);
-            if ((i - 1) % 100 == 0)
+            if ((i - 1) % 100 == 0) {
                 movePlayer.saveNetwork();
+                MatchIO.write(match, "cvc");
+            }
         }
         movePlayer.saveNetwork();
     }
 
-    public void runGame(double probability) {
+    public Match runGame(double probability) {
         Match match = new Match();
         Board board = match.getBoard();
         this.movePlayer = new MovePlayer(board);
@@ -56,6 +59,7 @@ public class CVCDispatcher {
         } while (winner == null);
         System.out.println(match);
         movePlayer.reviewGame(winner);
+        return match;
     }
 
     public void stop() {

@@ -20,6 +20,14 @@ public class Take extends Move {
     private static Image imageHovered;
     private final Piece taken;
 
+    static {
+        try {
+            imageHovered = ImageIO.read(new File("res/img/moves/line_hover.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Take(Piece mover, int from, int to, Piece taken) {
         super(Type.TAKE, mover, from, to);
         Point fromPoint = BoardUtils.getPointFromPosition(from, true);
@@ -28,14 +36,6 @@ public class Take extends Move {
         assert toPoint != null;
         setFrame(BoardUtils.getFrame(fromPoint, toPoint));
         this.taken = taken;
-    }
-
-    static {
-        try {
-            imageHovered = ImageIO.read(new File("res/moves/line_hover.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public static List<Take> listTakes(Board board, Piece piece) {

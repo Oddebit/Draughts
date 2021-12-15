@@ -2,6 +2,7 @@ package apps.pvc.app;
 
 import apps.cvc.MovePlayer;
 import game.Match;
+import game.io.MatchIO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Synchronized;
@@ -42,9 +43,14 @@ public class PVCDispatcher implements Runnable {
 
     @Override
     public void run() {
+        PieceColor winner = null;
         long lastTime;
         long now;
-        while (match.getWinner() == null) {
+        while (winner == null) {
+            if (possibleMoves.isEmpty()) {
+                winner = match.getNextMover();
+                continue;
+            }
             if (match.getNextMover() == playerColor) {
                 playerHasMoved = false;
                 // wait for player to make a move
@@ -59,7 +65,9 @@ public class PVCDispatcher implements Runnable {
                 Move move = movePlayer.playMove(possibleMoves);
                 addMove(move);
             }
+            winner = match.getWinner();
         }
+        MatchIO.write(match, "pvc");
     }
 
     @Synchronized
