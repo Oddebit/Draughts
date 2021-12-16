@@ -29,7 +29,7 @@ public class CVCDispatcher {
             long lastTime = System.currentTimeMillis();
             Match match = runGame(probability);
             System.out.printf("Finished in %.3f sec%n%n", (System.currentTimeMillis() - lastTime) / 1000d);
-            if ((i - 1) % 100 == 0) {
+            if ((i - 1) % 10_000 == 0) {
                 movePlayer.saveNetwork();
                 MatchIO.write(match, "cvc");
             }

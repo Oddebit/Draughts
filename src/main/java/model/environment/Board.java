@@ -17,7 +17,10 @@ import java.util.stream.Collectors;
 @Getter
 public class Board {
 
-    private Square[] squares = new Square[50];
+    public static Color black = new Color(110, 140, 80);
+    public static Color white = new Color(240, 230, 210);
+
+    private final Square[] squares = new Square[50];
 
     public Board(StartingOption startingOption) {
         for (int i = 0; i < 50; i++) {
@@ -29,8 +32,6 @@ public class Board {
     }
 
     public void renderSquares(Graphics graphics, int squareSize) {
-        Color black = new Color(0, 102, 0);
-        Color white = new Color(205, 205, 255);
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 Point point = new Point(x * squareSize, y * squareSize);
@@ -72,20 +73,11 @@ public class Board {
         if (position != 0) {
             getSquare(position).setPiece(null);
         }
-        piece.setPosition(-1);
     }
 
     public Square getSquare(int position) {
         if (1 > position || position > 50) return null;
         return squares[position - 1];
-    }
-
-    public static int getNextPosition(int position, Direction direction, int times) {
-        for (int i = 0; i < times; i++) {
-            position = getNextPosition(position, direction);
-            if (position == -1) break;
-        }
-        return position;
     }
 
     public static int getNextPosition(int position, Direction direction) {

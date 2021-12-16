@@ -37,6 +37,10 @@ public class BoardUtils {
         return 2 * col + incr;
     }
 
+    public static Rectangle getFrame(Point to) {
+        return getFrame(to, new Point(to.x + squareSize, to.y + squareSize));
+    }
+
     public static Rectangle getFrame(Point from, Point to) {
         int fromX = from.x;
         int fromY = from.y;

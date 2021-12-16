@@ -2,14 +2,12 @@ package model.moves;
 
 import model.environment.Board;
 import model.environment.Direction;
+import model.moves.io.MoveImageIO;
 import model.pieces.Piece;
 import model.pieces.PieceColor;
 import utils.BoardUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,52 +15,44 @@ import java.util.Map;
 
 public class March extends Move {
 
-    private static Image image;
-    private static Image imageHovered;
-    private static Image imageStep;
-    private static Image imageStepHovered;
-
     public March(Piece mover, int from, int to) {
         super(Type.MARCH, mover, from, to);
-        Point fromPoint = BoardUtils.getPointFromPosition(from, true);
-        Point toPoint = BoardUtils.getPointFromPosition(to, true);
-        assert fromPoint != null;
-        assert toPoint != null;
-        setFrame(BoardUtils.getFrame(fromPoint, toPoint));
-    }
+        int squareSize = BoardUtils.squareSize;
+        Point pointFrom = BoardUtils.getPointFromPosition(from, true);
+        Point pointTo = BoardUtils.getPointFromPosition(to, true);
+        assert pointFrom != null;
+        assert pointTo != null;
 
-    static {
-        try {
-            image = ImageIO.read(new File("res/img/moves/arrow_no_hover.png"));
-            imageHovered = ImageIO.read(new File("res/img/moves/arrow_hover.png"));
-            imageStep = ImageIO.read(new File("res/img/moves/line_no_hover.png"));
-            imageStepHovered = ImageIO.read(new File("res/img/moves/line_hover.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int dx = pointTo.x - pointFrom.x;
+        int dy = pointTo.y - pointFrom.y;
+        int fromX = pointTo.x - (int) Math.copySign(squareSize, dx);
+        int fromY = pointTo.y - (int) Math.copySign(squareSize, dy);
+        setFrame(BoardUtils.getFrame(new Point(fromX, fromY), pointTo));
     }
 
     @Override
-    public void render(Graphics graphics, boolean hovered) {
+    public void render(Graphics graphics, MoveImageIO.State state) {
+        int squareSize = BoardUtils.squareSize;
+
         Point pointFrom = BoardUtils.getPointFromPosition(getFrom(), true);
         Point pointTo = BoardUtils.getPointFromPosition(getTo(), true);
         assert pointFrom != null;
         assert pointTo != null;
+
         int dx = pointTo.x - pointFrom.x;
         int dy = pointTo.y - pointFrom.y;
-        int squareSize = BoardUtils.squareSize;
 
         int fromX = pointFrom.x - (int) Math.copySign(squareSize / 2d, dx);
         int fromY = pointFrom.y - (int) Math.copySign(squareSize / 2d, dy);
         for (int i = 0; i < Math.abs(dy / squareSize) - 1; i++) {
-            graphics.drawImage(hovered ? imageStepHovered : imageStep, fromX, fromY,
+            graphics.drawImage(MoveImageIO.getImage(MoveImageIO.Icon.LINE, state), fromX, fromY,
                     (int) Math.copySign(2 * squareSize, dx), (int) Math.copySign(2 * squareSize, dy),
                     new Frame());
             fromX += Math.copySign(squareSize, dx);
             fromY += Math.copySign(squareSize, dy);
         }
 
-        graphics.drawImage(hovered ? imageHovered : image,
+        graphics.drawImage(MoveImageIO.getImage(MoveImageIO.Icon.ARROW, state),
                 pointTo.x - (int) Math.copySign(1.5 * squareSize, dx),
                 pointTo.y - (int) Math.copySign(1.5 * squareSize, dy),
                 (int) Math.copySign(2 * squareSize, dx), (int) Math.copySign(2 * squareSize, dy),

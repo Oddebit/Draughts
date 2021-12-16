@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.Synchronized;
 import model.environment.Board;
 import model.moves.Move;
-import model.moves.Roundup;
+import model.moves.io.MoveImageIO;
 import model.pieces.PieceColor;
 
 import java.awt.*;
@@ -22,13 +22,15 @@ public class PVPDispatcher {
     private final Board board;
     private final int squareSize;
 
+    private Move lastMove;
     private List<? extends Move> possibleMoves;
     private Move hovered;
 
     public PVPDispatcher() {
-        this.match = new Match();
-        this.board = match.getBoard();
-        this.squareSize = 60;
+        match = new Match();
+        board = match.getBoard();
+        squareSize = 60;
+        lastMove = null;
         possibleMoves = Move.listPossibleMoves(board, PieceColor.WHITE);
     }
 
@@ -36,15 +38,18 @@ public class PVPDispatcher {
     public void render(Graphics graphics) {
         board.renderSquares(graphics, squareSize);
 
-        possibleMoves.forEach(move -> move.render(graphics, false));
+        if (lastMove != null) {
+            lastMove.render(graphics, MoveImageIO.State.LAST);
+        }
+        possibleMoves.forEach(move -> {
+            if (hovered != move)
+                move.render(graphics, MoveImageIO.State.POSSIBLE);
+        });
         try {
             if (hovered != null) {
-                hovered.render(graphics, true);
-                if (hovered.getType() == Move.Type.ROUNDUP) {
-                    ((Roundup) hovered).getRoute().forEach(take -> take.render(graphics, true));
-                }
+                hovered.render(graphics, MoveImageIO.State.HOVERED);
             }
-        } catch (NullPointerException npe) {
+        } catch (NullPointerException ignored) {
         }
         board.renderPieces(graphics);
     }
@@ -54,6 +59,7 @@ public class PVPDispatcher {
             match.addMove(move);
             hovered = null;
             possibleMoves = Move.listPossibleMoves(board, match.getNextMover());
+            lastMove = move;
         });
     }
 

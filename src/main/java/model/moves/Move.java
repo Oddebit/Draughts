@@ -4,6 +4,7 @@ import lombok.Data;
 import model.environment.Board;
 import model.environment.Cardinal;
 import model.environment.Direction;
+import model.moves.io.MoveImageIO;
 import model.pieces.Piece;
 import model.pieces.PieceColor;
 
@@ -47,7 +48,7 @@ public abstract class Move {
         }
     }
 
-    public abstract void render(Graphics graphics, boolean hovered);
+    public abstract void render(Graphics graphics, MoveImageIO.State state);
 
     public static Map<Direction, LinkedList<Integer>> mapDirections(int position) {
         return Arrays.stream(Direction.values())

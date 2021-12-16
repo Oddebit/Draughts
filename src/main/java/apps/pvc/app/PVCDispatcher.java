@@ -9,6 +9,7 @@ import lombok.Synchronized;
 import model.environment.Board;
 import model.moves.Move;
 import model.moves.Roundup;
+import model.moves.io.MoveImageIO;
 import model.pieces.PieceColor;
 
 import java.awt.*;
@@ -28,16 +29,20 @@ public class PVCDispatcher implements Runnable {
     private MovePlayer movePlayer;
     boolean playerHasMoved = false;
 
+    private Move lastMove;
     private List<? extends Move> possibleMoves;
     private Move hovered;
 
     public PVCDispatcher() {
-        squareSize = 60;
-        playerColor = PieceColor.WHITE;
         match = new Match();
         board = match.getBoard();
-        possibleMoves = Move.listPossibleMoves(board, match.getNextMover());
+        squareSize = 60;
+
+        playerColor = PieceColor.WHITE;
         movePlayer = new MovePlayer(board);
+
+        lastMove = null;
+        possibleMoves = Move.listPossibleMoves(board, match.getNextMover());
         new Thread(this).start();
     }
 
@@ -74,17 +79,18 @@ public class PVCDispatcher implements Runnable {
     public void render(Graphics graphics) {
         board.renderSquares(graphics, squareSize);
 
-        if (match.getNextMover() == playerColor) {
-            possibleMoves.forEach(move -> move.render(graphics, false));
-            try {
-                if (hovered != null) {
-                    hovered.render(graphics, true);
-                    if (hovered.getType() == Move.Type.ROUNDUP) {
-                        ((Roundup) hovered).getRoute().forEach(take -> take.render(graphics, true));
-                    }
+        possibleMoves.forEach(move -> move.render(graphics, MoveImageIO.State.POSSIBLE));
+        if (lastMove != null) {
+            lastMove.render(graphics, MoveImageIO.State.LAST);
+        }
+        try {
+            if (hovered != null) {
+                hovered.render(graphics, MoveImageIO.State.HOVERED);
+                if (hovered.getType() == Move.Type.ROUNDUP) {
+                    ((Roundup) hovered).getRoute().forEach(take -> take.render(graphics, MoveImageIO.State.HOVERED));
                 }
-            } catch (NullPointerException npe) {
             }
+        } catch (NullPointerException npe) {
         }
         board.renderPieces(graphics);
     }
@@ -97,6 +103,7 @@ public class PVCDispatcher implements Runnable {
     public void addMove(Move move) {
         match.addMove(move);
         hovered = null;
+        lastMove = move;
         possibleMoves = Move.listPossibleMoves(board, match.getNextMover());
         playerHasMoved = true;
     }

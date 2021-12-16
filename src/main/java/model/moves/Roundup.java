@@ -3,14 +3,12 @@ package model.moves;
 import lombok.Getter;
 import model.environment.Board;
 import model.environment.Square;
+import model.moves.io.MoveImageIO;
 import model.pieces.Piece;
 import model.pieces.PieceColor;
 import utils.BoardUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,19 +19,7 @@ import static java.util.stream.Collectors.toList;
 @Getter
 public class Roundup extends Move {
 
-    private static Image image;
-    private static Image imageHovered;
-
     private final LinkedList<Take> route;
-
-    static {
-        try {
-            image = ImageIO.read(new File("res/img/moves/circle_no_hover.png"));
-            imageHovered = ImageIO.read(new File("res/img/moves/circle_hover.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public Roundup(Piece mover, LinkedList<Take> route) {
         super(Type.ROUNDUP, mover, route.getFirst().getFrom(), route.getLast().getTo());
@@ -46,11 +32,7 @@ public class Roundup extends Move {
 
         this.route = new LinkedList<>();
         this.route.add(take);
-
-        Point toPoint = BoardUtils.getPointFromPosition(getFinalPosition(), false);
-        int squareSize = BoardUtils.squareSize;
-        assert toPoint != null;
-        setFrame(new Rectangle(toPoint.x, toPoint.y, squareSize, squareSize));
+        setFrame(route.getLast().getFrame());
     }
 
     public Roundup(Roundup roundup, Take take) {
@@ -113,11 +95,14 @@ public class Roundup extends Move {
     }
 
     @Override
-    public void render(Graphics graphics, boolean hovered) {
+    public void render(Graphics graphics, MoveImageIO.State state) {
         Point pointTo = BoardUtils.getPointFromPosition(getTo(), false);
 
         assert pointTo != null;
-        graphics.drawImage(hovered ? imageHovered : image, pointTo.x, pointTo.y,
+        graphics.drawImage(MoveImageIO.getImage(MoveImageIO.Icon.CROSS, state), pointTo.x, pointTo.y,
                 BoardUtils.squareSize, BoardUtils.squareSize, new Frame());
+        if (state != MoveImageIO.State.POSSIBLE)
+            route.forEach(take -> take.render(graphics, state));
+
     }
 }
