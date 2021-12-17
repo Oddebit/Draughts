@@ -1,7 +1,7 @@
 package computer.io;
 
-import apps.cvc.nn.NeuralNetwork;
-import apps.cvc.nn.io.NeuralNetworkIO;
+import utils.nn.NeuralNetwork;
+import utils.nn.io.NeuralNetworkIO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +9,12 @@ class NeuralNetworkIOTest {
 
     @Test
     void writeThenRead() {
-        NeuralNetwork write = new NeuralNetwork(202, 202, 1);
+        NeuralNetwork write = new NeuralNetwork(202, 64, 8, 8, 1);
         NeuralNetworkIO.write(write);
-        NeuralNetwork read = NeuralNetworkIO.read();
+        NeuralNetwork read = NeuralNetworkIO.read(202, 64, 8, 8, 1);
 
-        double[][] wIHWrite = write.getWeightsIH().getData();
-        double[][] wIHRead = read.getWeightsIH().getData();
+        double[][] wIHWrite = write.getWeights().get(0).getData();
+        double[][] wIHRead = read.getWeights().get(0).getData();
 
         for (int i = 0; i < wIHRead.length; i++) {
             for (int j = 0; j < wIHRead[i].length; j++) {

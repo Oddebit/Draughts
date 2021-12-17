@@ -14,30 +14,38 @@ import java.util.function.Predicate;
 public class CVCDispatcher {
 
     private MovePlayer movePlayer;
-    boolean play;
+    private final double probabilityRandom;
+    private final int savingFrequency;
 
-    public CVCDispatcher() {
+    private boolean play;
+
+    public CVCDispatcher(double probabilityRandom, int savingFrequency) {
+        this.probabilityRandom = probabilityRandom;
+        this.savingFrequency = savingFrequency;
         play = true;
     }
 
-    public void runGames(int epochs, double probability) {
+    public void runGames(int epochs) {
+        long lastTime = System.currentTimeMillis();
         Predicate<Integer> keepGoing = epochs <= 0 ? n -> play :
                 n -> n < epochs && play;
         for (int i = 0; keepGoing.test(i); i++) {
-            System.out.println("-".repeat(19));
-            System.out.printf("***   Game %2d   ***", i + 1);
-            long lastTime = System.currentTimeMillis();
-            Match match = runGame(probability);
-            System.out.printf("Finished in %.3f sec%n%n", (System.currentTimeMillis() - lastTime) / 1000d);
-            if ((i - 1) % 10_000 == 0) {
+            Match match = runGame(i, probabilityRandom);
+            if ((i - 1) % savingFrequency == 0) {
                 movePlayer.saveNetwork();
-                MatchIO.write(match, "cvc");
             }
         }
+
+        double time = (System.currentTimeMillis() - lastTime)/1000d;
+        System.out.printf("%n%nAchieved %d epochs in %.3f sec", epochs, time);
+        System.out.printf("%nAverage time : %.3f sec%n", time/epochs);
         movePlayer.saveNetwork();
     }
 
-    public Match runGame(double probability) {
+    public Match runGame(int epoch, double probability) {
+        long lastTime = System.currentTimeMillis();
+        System.out.printf("%nGame %d", epoch + 1);
+
         Match match = new Match();
         Board board = match.getBoard();
         this.movePlayer = new MovePlayer(board);
@@ -57,8 +65,9 @@ public class CVCDispatcher {
                 move = movePlayer.playMove(possibleMoves);
             match.addMove(move);
         } while (winner == null);
-        System.out.println(match);
+
         movePlayer.reviewGame(winner);
+        System.out.printf(" finished in %.3f sec", (System.currentTimeMillis() - lastTime) / 1000d);
         return match;
     }
 

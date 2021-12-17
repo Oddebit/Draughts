@@ -1,10 +1,11 @@
 package apps.pvc.app;
 
-import apps.pvp.app.PVPApp;
 import apps.pvp.app.Window;
+import model.pieces.PieceColor;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 public class PVCApp extends Canvas implements Runnable {
 
@@ -13,7 +14,7 @@ public class PVCApp extends Canvas implements Runnable {
     private final PVCDispatcher dispatcher;
 
     public PVCApp() {
-        dispatcher = new PVCDispatcher();
+        dispatcher = new PVCDispatcher(PieceColor.values()[new Random().nextInt(1)]);
         new Window(dispatcher.getSquareSize() * 10, this);
         PVCMouseInput mouseInput = new PVCMouseInput(dispatcher);
         this.addMouseListener(mouseInput);

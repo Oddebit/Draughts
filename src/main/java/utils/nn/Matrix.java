@@ -1,4 +1,4 @@
-package apps.cvc.nn;
+package utils.nn;
 
 import lombok.Getter;
 

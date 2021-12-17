@@ -11,13 +11,15 @@ import model.pieces.Queen;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 @Getter
 public class Match {
 
     private final Board board;
-    private final List<Move> history;
+    private final LinkedList<Move> history;
+    private final Vector<Vector<Move>> colorHistory;
 
     private PieceColor nextMover = PieceColor.WHITE;
 
@@ -28,6 +30,9 @@ public class Match {
     public Match(Board board, LinkedList<Move> history) {
         this.board = board;
         this.history = history;
+        this.colorHistory = new Vector<>();
+        colorHistory.add(new Vector<>());
+        colorHistory.add(new Vector<>());
     }
 
     public void addMove(Move move) {
@@ -54,6 +59,7 @@ public class Match {
     }
 
     @Override
+    @Deprecated
     public String toString() {
         StringBuilder string = new StringBuilder();
         for (int i = 0; i < history.size(); i++) {
@@ -62,15 +68,4 @@ public class Match {
         }
         return string.toString();
     }
-
-//   public static Game parseString(String string) {
-//        List<Pair<Move, Move>> history = new LinkedList<>();
-//        PieceColor toMove;
-//        String[] data = string.split("\n/d+\\. ");
-//        for (String datum : data) {
-//            String[] pair = datum.split(" ");
-//            history.add(new Pair<>(Move.parseString(pair[0]), Move.parseString(pair[1])));
-//        }
-//        return new Game(history,toMove);
-//    }
 }

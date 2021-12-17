@@ -33,12 +33,12 @@ public class PVCDispatcher implements Runnable {
     private List<? extends Move> possibleMoves;
     private Move hovered;
 
-    public PVCDispatcher() {
+    public PVCDispatcher(PieceColor playerColor) {
         match = new Match();
         board = match.getBoard();
         squareSize = 60;
 
-        playerColor = PieceColor.WHITE;
+        this.playerColor = playerColor;
         movePlayer = new MovePlayer(board);
 
         lastMove = null;
@@ -54,9 +54,7 @@ public class PVCDispatcher implements Runnable {
         while (winner == null) {
             if (possibleMoves.isEmpty()) {
                 winner = match.getNextMover();
-                continue;
-            }
-            if (match.getNextMover() == playerColor) {
+            } else if (match.getNextMover() == playerColor) {
                 playerHasMoved = false;
                 // wait for player to make a move
                 while (!playerHasMoved) {
@@ -70,8 +68,8 @@ public class PVCDispatcher implements Runnable {
                 Move move = movePlayer.playMove(possibleMoves);
                 addMove(move);
             }
-            winner = match.getWinner();
         }
+        System.out.println(winner + " wins");
         MatchIO.write(match, "pvc");
     }
 

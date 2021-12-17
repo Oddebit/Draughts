@@ -1,6 +1,6 @@
 package apps.cvc;
 
-import apps.cvc.nn.io.NeuralNetworkIO;
+import utils.nn.io.NeuralNetworkIO;
 import lombok.Getter;
 import model.environment.Board;
 import model.moves.Move;
